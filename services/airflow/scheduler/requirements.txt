@@ -1,0 +1,9 @@
+faker==19.13.0
+pymongo
+faker-commerce==1.0.4
+psycopg2-binary==2.9.10
+psycopg2-pool==1.2
+rich==13.9.4
+pyspark==3.5.3
+apache-airflow-providers-mongo
+apache-airflow-providers-postgres

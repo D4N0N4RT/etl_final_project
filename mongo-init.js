@@ -1,0 +1,7 @@
+db.createCollection("user_sessions")
+db.createCollection("product_price_history")
+db.createCollection("event_logs")
+db.createCollection("support_tickets")
+db.createCollection("user_recommendations")
+db.createCollection("moderation_queue")
+db.createCollection("search_queries")
