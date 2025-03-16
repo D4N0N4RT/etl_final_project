@@ -6,9 +6,10 @@ import sys
 from datetime import datetime, timedelta
 from faker import Faker
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://admin:admin@mongo:27017")
+MONGO_URI = os.getenv("MONGO_URI", "mongo://admin:admin@mongo:27017")
 client = MongoClient(MONGO_URI)
-db = client.getDatabase(os.getenv("MONGO_DB"))
+MONGO_DB = os.getenv("MONGO_DB")
+db = client[MONGO_DB]
 
 fake = Faker()
 

@@ -5,7 +5,7 @@ import pandas as pd
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.empty import EmptyOperator
 from airflow.providers.mongo.hooks.mongo import MongoHook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
@@ -71,8 +71,8 @@ with DAG(
     catchup=False,
     tags=["replication"],
 ) as dag:
-    task_start = DummyOperator(task_id='start', dag=dag)
-    task_finish = DummyOperator(task_id='finish', dag=dag)
+    task_start = EmptyOperator(task_id='start', dag=dag)
+    task_finish = EmptyOperator(task_id='finish', dag=dag)
 
     task_extract = PythonOperator(task_id='extract', python_callable=extract, provide_context=True, dag=dag)
     task_transform = PythonOperator(task_id='transform', python_callable=transform, provide_context=True, dag=dag)

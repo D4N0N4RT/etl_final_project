@@ -5,7 +5,7 @@ import pandas as pd
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.empty import EmptyOperator
 from airflow.providers.mongo.hooks.mongo import MongoHook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def extract(**kwargs):
-    mongo_hook = MongoHook(mongo_conn_id='airflow_mongo_conn')
+    mongo_hook = MongoHook(mongo_conn_id='mongo_conn')
     client = mongo_hook.get_conn()
     db_name = os.getenv("MONGO_DB", "source_db")
     collection = client[db_name][collection_name]
@@ -50,7 +50,7 @@ def load(**kwargs):
     if not transformed_data:
         return
 
-    pg_hook = PostgresHook(postgres_conn_id='airflow_postgres_conn')
+    pg_hook = PostgresHook(postgres_conn_id='postgres_conn')
     engine = pg_hook.get_sqlalchemy_engine()
 
     df = pd.DataFrame(transformed_data)
@@ -69,8 +69,8 @@ with DAG(
     catchup=False,
     tags=["replication"],
 ) as dag:
-    task_start = DummyOperator(task_id='start', dag=dag)
-    task_finish = DummyOperator(task_id='finish', dag=dag)
+    task_start = EmptyOperator(task_id='start', dag=dag)
+    task_finish = EmptyOperator(task_id='finish', dag=dag)
 
     task_extract = PythonOperator(task_id='extract', python_callable=extract, provide_context=True, dag=dag)
     task_transform = PythonOperator(task_id='transform', python_callable=transform, provide_context=True, dag=dag)

@@ -17,7 +17,7 @@ services:
       retries: 5
 
   airflow-init:
-    image: apache/airflow:2.7.2
+    build: services/airflow/init/
     container_name: airflow-init
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -38,7 +38,7 @@ services:
           --lastname User \
           --role Admin \
           --email admin@example.com
-        airflow connections add 'airflow_mongo_conn' \
+        airflow connections add 'mongo_conn' \
           --conn-type 'mongo' \
           --conn-host 'mongo' \
           --conn-schema '${MONGO_DB}' \
@@ -46,7 +46,7 @@ services:
           --conn-password '${MONGO_PASSWORD}' \
           --conn-port '${MONGO_PORT}' \
           --conn-extra '{"srv": false, "ssl": false, "allow_insecure": true, "authSource": "admin"}' &&
-        airflow connections add 'airflow_postgres_conn' \
+        airflow connections add 'postgres_conn' \
           --conn-type 'postgres' \
           --conn-host 'postgres' \
           --conn-schema '${PG_DB}' \
@@ -54,7 +54,7 @@ services:
           --conn-password '${PG_PASSWORD}' \
           --conn-port '${PG_PORT}'
     volumes:
-      - ./logic/airflow_dags:/opt/airflow/dags
+      - ./code/airflow_dags:/opt/airflow/dags
 
   postgres:
     container_name: postgres
@@ -105,6 +105,7 @@ services:
       MONGO_HOST: ${MONGO_HOST}
       MMONGO_USER: ${MONGO_USER}
       MONGO_PORT: ${MONGO_PORT}
+      MONGO_URI: "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}?authSource=admin"
       DATAGEN_USERS_COUNT: 1000
       DATAGEN_PRODUCTS_COUNT: 500
       DATAGEN_USER_SESSIONS_COUNT: 3000
@@ -115,10 +116,10 @@ services:
       DATAGEN_MODERATION_QUEUE_COUNT: 500
       DATAGEN_SEARCH_QUERIES_COUNT: 1500
     volumes:
-      - ./logic/data_init:/app/src
+      - ./code/data_init:/app/src
 
   airflow-webserver:
-    image: apache/airflow:2.7.2
+    image: apache/airflow:latest-python3.12
     container_name: airflow-webserver
     depends_on:
       postgres:
@@ -137,7 +138,7 @@ services:
       - "8080:8080"
     command: "webserver"
     volumes:
-      - ./logic/airflow_dags:/opt/airflow/dags
+      - ./code/airflow_dags:/opt/airflow/dags
 
 
   airflow-scheduler:
@@ -170,9 +171,9 @@ services:
 
     command: "scheduler"
     volumes:
-      - ./logic/airflow_dags:/opt/airflow/dags
+      - ./code/airflow_dags:/opt/airflow/dags
 
 volumes:
   airflow_postgres_data:
   postgres_data:
-  mysql_data:
+  mongo_data:
