@@ -58,7 +58,7 @@ def load(**kwargs):
     df['submitted_at'] = pd.to_datetime(df['submitted_at'])
 
     df.set_index("review_id", inplace=True)
-    df.to_sql(collection_name, schema="source", con=engine, if_exists="replace", index=True)
+    df.to_sql(collection_name, con=engine, if_exists="replace", index=True)
 
     logging.info(f"Inserted {len(df)} rows")
 

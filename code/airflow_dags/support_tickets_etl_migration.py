@@ -60,7 +60,7 @@ def load(**kwargs):
     df = df.reindex(columns=neworder)
 
     df.set_index("ticket_id", inplace=True)
-    df.to_sql(collection_name, schema="source", con=engine, if_exists="replace", index=True)
+    df.to_sql(collection_name, con=engine, if_exists="replace", index=True)
 
     logging.info(f"Inserted {len(df)} rows")
 

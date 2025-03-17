@@ -157,11 +157,11 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__WEBSERVER__SECRET_KEY: a1b2c3d4e5f6a7b8c9d0e1f2g3h4i5j6
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow_user:airflow_pass@airflow_postgres:5432/airflow_db
-      MYSQL_PASSWORD: ${MONGO_PASSWORD}
-      MYSQL_DB: ${MONGO_DB}
-      MYSQL_HOST: ${MONGO_HOST}
-      MYSQL_USER: ${MONGO_USER}
-      MYSQL_PORT: ${MONGO_PORT}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_DB: ${MONGO_DB}
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PORT: ${MONGO_PORT}
       PG_PASSWORD: ${PG_PASSWORD}
       PG_DB: ${PG_DB}
       PG_HOST: ${PG_HOST}

@@ -54,7 +54,7 @@ def load(**kwargs):
 
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df.set_index("event_id", inplace=True)
-    df.to_sql(collection_name, schema="source", con=engine, if_exists="replace", index=True)
+    df.to_sql(collection_name, con=engine, if_exists="replace", index=True)
 
     logging.info(f"Inserted {len(df)} rows")
 
